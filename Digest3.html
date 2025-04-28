@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interoceptive Accuracy Effects</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+  <div class="bg-white p-8 rounded-2xl shadow-xl max-w-2xl w-full">
+    <h1 class="text-3xl font-bold text-center mb-6">Interoceptive Accuracy Effects</h1>
+
+    <label class="block mb-2 text-gray-700">Interoceptive Accuracy:</label>
+    <input id="iacc-slider" type="range" min="0" max="100" value="50" class="w-full mb-4">
+    <div class="text-center text-gray-600 mb-6">
+      Accuracy: <span id="iacc-value">50</span>
+    </div>
+
+    <div class="space-y-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="font-semibold">Rubber Hand Illusion (classic)</h2>
+          <div id="rhi-strength" class="text-indigo-600">Medium</div>
+        </div>
+        <button onclick="openModal('rhi-info')" class="text-blue-500">ℹ️</button>
+      </div>
+
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="font-semibold">Heartbeat-synced Body Ownership</h2>
+          <div id="heartbeat-illusion-strength" class="text-indigo-600">Medium</div>
+        </div>
+        <button onclick="openModal('heartbeat-info')" class="text-blue-500">ℹ️</button>
+      </div>
+
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="font-semibold">Self-Other Boundary Flexibility</h2>
+          <div id="self-other-flexibility" class="text-indigo-600">Medium</div>
+        </div>
+        <button onclick="openModal('selfother-info')" class="text-blue-500">ℹ️</button>
+      </div>
+
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="font-semibold">Social Perception Malleability</h2>
+          <div id="social-malleability" class="text-indigo-600">Medium</div>
+        </div>
+        <button onclick="openModal('social-info')" class="text-blue-500">ℹ️</button>
+      </div>
+
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="font-semibold">Emotional Regulation & Anxiety</h2>
+          <div id="emotion-regulation" class="text-indigo-600">Medium</div>
+        </div>
+        <button onclick="openModal('emotion-info')" class="text-blue-500">ℹ️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Templates -->
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+    <div class="bg-white p-6 rounded-2xl shadow-lg max-w-md w-full">
+      <h2 id="modal-title" class="text-xl font-bold mb-4"></h2>
+      <p id="modal-content" class="text-gray-700 mb-4"></p>
+      <button onclick="closeModal()" class="bg-indigo-500 text-white px-4 py-2 rounded-full">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const slider = document.getElementById('iacc-slider');
+    const iaccValue = document.getElementById('iacc-value');
+    const rhiStrength = document.getElementById('rhi-strength');
+    const heartbeatIllusionStrength = document.getElementById('heartbeat-illusion-strength');
+    const selfOtherFlexibility = document.getElementById('self-other-flexibility');
+    const socialMalleability = document.getElementById('social-malleability');
+    const emotionRegulation = document.getElementById('emotion-regulation');
+
+    function updateValues(value) {
+      iaccValue.textContent = value;
+
+      if (value < 30) {
+        rhiStrength.textContent = 'High';
+        heartbeatIllusionStrength.textContent = 'Low';
+        selfOtherFlexibility.textContent = 'High';
+        socialMalleability.textContent = 'High';
+        emotionRegulation.textContent = 'Poor';
+      } else if (value < 70) {
+        rhiStrength.textContent = 'Medium';
+        heartbeatIllusionStrength.textContent = 'Medium';
+        selfOtherFlexibility.textContent = 'Medium';
+        socialMalleability.textContent = 'Medium';
+        emotionRegulation.textContent = 'Moderate';
+      } else {
+        rhiStrength.textContent = 'Low';
+        heartbeatIllusionStrength.textContent = 'High';
+        selfOtherFlexibility.textContent = 'Low';
+        socialMalleability.textContent = 'Low';
+        emotionRegulation.textContent = 'Strong (but anxious)';
+      }
+    }
+
+    function openModal(infoType) {
+      const modal = document.getElementById('modal');
+      const title = document.getElementById('modal-title');
+      const content = document.getElementById('modal-content');
+
+      const infos = {
+        'rhi-info': {
+          title: 'Rubber Hand Illusion (Classic)',
+          content: 'The illusion where people experience ownership over a rubber hand when seeing it stroked synchronously with their own hidden hand.'
+        },
+        'heartbeat-info': {
+          title: 'Heartbeat-synced Body Ownership',
+          content: 'When a virtual body part pulses with your heartbeat, people with higher interoceptive accuracy feel stronger ownership of that body part.'
+        },
+        'selfother-info': {
+          title: 'Self-Other Boundary Flexibility',
+          content: 'Measures how easily people feel their body merging with others (e.g., during the enfacement illusion).' 
+        },
+        'social-info': {
+          title: 'Social Perception Malleability',
+          content: 'How malleable are social attitudes (like racial bias) after bodily illusions like the RHI or enfacement.'
+        },
+        'emotion-info': {
+          title: 'Emotional Regulation & Anxiety',
+          content: 'Higher interoceptive accuracy links to better self-regulation but also greater emotional arousal and risk for anxiety disorders.'
+        }
+      };
+
+      title.textContent = infos[infoType].title;
+      content.textContent = infos[infoType].content;
+      modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.add('hidden');
+    }
+
+    slider.addEventListener('input', (e) => {
+      updateValues(e.target.value);
+    });
+
+    updateValues(slider.value);
+  </script>
+</body>
+</html>
